@@ -1,94 +1,4 @@
-// script.js (Updated for Display Label in Dropdown)
-document.addEventListener('DOMContentLoaded', () => {
-    const songDropdown = document.getElementById('songDropdown');
-    const resultsDiv = document.getElementById('results');
-
-    if (typeof songData === 'undefined' || !Array.isArray(songData)) {
-        resultsDiv.innerHTML = '<p class="no-results" style="color: red;">Error: Song data not found or is invalid. Make sure you pasted the data correctly in index.html.</p>';
-        console.error("songData is not defined or not an array.");
-        return;
-    }
-
-    // --- Populate Dropdown with Display Labels ---
-
-    // Use a Map to easily get unique display labels while storing the original song title as the value
-    const uniqueSongOptions = new Map();
-
-    songData.forEach(entry => {
-        // Ensure we have a valid label and song title
-        const label = entry.display_label || entry.song || "Unknown Song";
-        const value = entry.song || "Unknown Song";
-        // Add to map - if label already exists, it just gets overwritten (which is fine)
-        uniqueSongOptions.set(label, value);
-    });
-
-    // Convert the map to an array of objects for sorting
-    const sortedOptions = Array.from(uniqueSongOptions, ([label, value]) => ({ label, value }));
-
-    // Sort alphabetically by the display label
-    sortedOptions.sort((a, b) => a.label.localeCompare(b.label));
-
-    // Add sorted options to the dropdown
-    sortedOptions.forEach(opt => {
-        const option = document.createElement('option');
-        option.value = opt.value; // Use original song title for filtering value
-        option.textContent = opt.label; // Use combined label for display text
-        songDropdown.appendChild(option);
-    });
-
-    // --- Add Event Listener for Dropdown Changes ---
-    songDropdown.addEventListener('change', () => {
-        // Get the value (which is the original song title)
-        const selectedSongValue = songDropdown.value;
-        resultsDiv.innerHTML = ''; // Clear previous results
-
-        if (!selectedSongValue) {
-             resultsDiv.innerHTML = '<p class="no-results">Please select a song from the dropdown above.</p>';
-            return;
-        }
-
-        // Filter data using the ORIGINAL song title stored in the option's value
-        const matchingEntries = songData.filter(item => item.song === selectedSongValue);
-
-        // Display results (This part remains the same as the previous version)
-        if (matchingEntries.length > 0) {
-            // Get the display label from the *first* matching entry to use as the title
-            // (Assumes all entries for the same song value have the same display label)
-             const titleLabel = matchingEntries[0].display_label || selectedSongValue;
-            const resultsTitle = document.createElement('h3');
-            resultsTitle.textContent = `Song History:`;
-            resultsDiv.appendChild(resultsTitle);
-
-            const resultsList = document.createElement('ul');
-            matchingEntries.forEach(entry => {
-                const listItem = document.createElement('li');
-
-                const dateText = document.createTextNode(`${entry.date || 'N/A'} - `);
-                listItem.appendChild(dateText);
-
-                if (entry.final_hyperlink) {
-                    const link = document.createElement('a');
-                    link.href = entry.final_hyperlink;
-                    link.textContent = 'Link';
-                    link.target = "_blank";
-                    link.rel = "noopener noreferrer";
-                    listItem.appendChild(link);
-                } else {
-                    const noLinkText = document.createTextNode('(No valid link found)');
-                    const span = document.createElement('span');
-                    span.style.color = '#777';
-                    span.appendChild(noLinkText);
-                    listItem.appendChild(span);
-                }
-                resultsList.appendChild(listItem);
-            });
-            resultsDiv.appendChild(resultsList);
-        } else {
-            // If somehow no match is found (shouldn't happen if value came from dropdown)
-            resultsDiv.innerHTML = `<p class="no-results">No records found for "${selectedSongValue}".</p>`;
-        }
-    });
-});
+// Define songData array FIRST
 const songData = [
   {
     "song": "(Musical Chrissy Links)",
@@ -119,11 +29,515 @@ const songData = [
     "final_hyperlink": "https://www.tiktok.com/@musicalchrissy88"
   },
   {
-    "song": "(Musical Chrissy Links)",
-    "display_label": " *Musical Chrissy Links*",
-    "date": "Any mistakes or issue, Discord Contact: @RagKirk",
-    "timestamp": "00:05:01",
-    "final_hyperlink": "https://discord.com/invite/dB3bgfFc2B"
+    "song": "No One Mourns the Wicked",
+    "display_label": "No One Mourns the Wicked, Wicked",
+    "date": "2025-05-11",
+    "timestamp": "00:06:01",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=361s"
+  },
+  {
+    "song": "Belle",
+    "display_label": "Belle, Beauty and the Beast",
+    "date": "2025-05-11",
+    "timestamp": "00:11:10",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=670s"
+  },
+  {
+    "song": "Hawaiian Roller Coaster Ride",
+    "display_label": "Hawaiian Roller Coaster Ride, Lilo & Stitch",
+    "date": "2025-05-11",
+    "timestamp": "00:17:11",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=1031s"
+  },
+  {
+    "song": "Be Our Guest",
+    "display_label": "Be Our Guest, Beauty and the Beast",
+    "date": "2025-05-11",
+    "timestamp": "00:22:22",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=1342s"
+  },
+  {
+    "song": "Beauty and the Beast",
+    "display_label": "Beauty and the Beast, Beauty and the Beast",
+    "date": "2025-05-11",
+    "timestamp": "00:28:36",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=1716s"
+  },
+  {
+    "song": "Let It Go",
+    "display_label": "Let It Go, Frozen",
+    "date": "2025-05-11",
+    "timestamp": "00:32:33",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=1953s"
+  },
+  {
+    "song": "I Just Can't Wait to Be King",
+    "display_label": "I Just Can't Wait to Be King, The Lion King",
+    "date": "2025-05-11",
+    "timestamp": "00:37:30",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=2250s"
+  },
+  {
+    "song": "Scales and Arpeggios",
+    "display_label": "Scales and Arpeggios, The Aristocats",
+    "date": "2025-05-11",
+    "timestamp": "00:42:23",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=2543s"
+  },
+  {
+    "song": "Kiss the Girl",
+    "display_label": "Kiss the Girl, The Little Mermaid",
+    "date": "2025-05-11",
+    "timestamp": "00:44:43",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=2683s"
+  },
+  {
+    "song": "The Scuttlebutt",
+    "display_label": "The Scuttlebutt, The Little Mermaid",
+    "date": "2025-05-11",
+    "timestamp": "00:49:10",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=2950s"
+  },
+  {
+    "song": "Arabian Nights",
+    "display_label": "Arabian Nights, Aladdin",
+    "date": "2025-05-11",
+    "timestamp": "00:53:04",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=3184s"
+  },
+  {
+    "song": "Healing Incantation",
+    "display_label": "Healing Incantation, Tangled",
+    "date": "2025-05-11",
+    "timestamp": "00:56:56",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=3416s"
+  },
+  {
+    "song": "On the Road",
+    "display_label": "On the Road, Thumbelina",
+    "date": "2025-05-11",
+    "timestamp": "00:59:52",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=3592s"
+  },
+  {
+    "song": "Pink Pony Club",
+    "display_label": "Pink Pony Club, Chappell Roan",
+    "date": "2025-05-11",
+    "timestamp": "01:04:45",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=3885s"
+  },
+  {
+    "song": "Go the Distance",
+    "display_label": "Go the Distance, Hercules",
+    "date": "2025-05-11",
+    "timestamp": "01:10:13",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=4213s"
+  },
+  {
+    "song": "Poor Unfortunate Souls",
+    "display_label": "Poor Unfortunate Souls, The Little Mermaid",
+    "date": "2025-05-11",
+    "timestamp": "01:13:32",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=4412s"
+  },
+  {
+    "song": "Popular",
+    "display_label": "Popular, Wicked",
+    "date": "2025-05-11",
+    "timestamp": "01:18:36",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=4716s"
+  },
+  {
+    "song": "Doctor Jones",
+    "display_label": "Doctor Jones, Aqua",
+    "date": "2025-05-11",
+    "timestamp": "01:25:00",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=5100s"
+  },
+  {
+    "song": "Happy Working Song",
+    "display_label": "Happy Working Song, Enchanted",
+    "date": "2025-05-11",
+    "timestamp": "01:29:52",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=5392s"
+  },
+  {
+    "song": "Once Upon a December",
+    "display_label": "Once Upon a December, Anastasia",
+    "date": "2025-05-11",
+    "timestamp": "01:35:13",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=5713s"
+  },
+  {
+    "song": "I See the Light",
+    "display_label": "I See the Light, Tangled",
+    "date": "2025-05-11",
+    "timestamp": "01:39:25",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=5965s"
+  },
+  {
+    "song": "Something There",
+    "display_label": "Something There, Beauty And The Beast",
+    "date": "2025-05-11",
+    "timestamp": "01:44:02",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=6242s"
+  },
+  {
+    "song": "Waiting On A Wish",
+    "display_label": "Waiting On A Wish, Snow White",
+    "date": "2025-05-11",
+    "timestamp": "01:47:03",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=6423s"
+  },
+  {
+    "song": "We Don't Talk About Bruno",
+    "display_label": "We Don't Talk About Bruno, Encanto",
+    "date": "2025-05-11",
+    "timestamp": "01:53:03",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=6783s"
+  },
+  {
+    "song": "Jessie, the Yodelin' Cowgirl",
+    "display_label": "Jessie, the Yodelin' Cowgirl, Toy Story 2",
+    "date": "2025-05-11",
+    "timestamp": "01:58:29",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=7109s"
+  },
+  {
+    "song": "Defying Gravity",
+    "display_label": "Defying Gravity, Wicked",
+    "date": "2025-05-11",
+    "timestamp": "02:02:23",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=7343s"
+  },
+  {
+    "song": "Princess Medley",
+    "display_label": "Princess Medley",
+    "date": "2025-05-11",
+    "timestamp": "02:13:05",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=7985s"
+  },
+  {
+    "song": "Prince Ali",
+    "display_label": "Prince Ali, Aladdin",
+    "date": "2025-05-11",
+    "timestamp": "02:33:51",
+    "final_hyperlink": "https://www.youtube.com/watch?v=908MmNYvsD0&t=9231s"
+  },
+  {
+    "song": "No One Mourns the Wicked",
+    "display_label": "No One Mourns the Wicked, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "00:03:38",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=218s"
+  },
+  {
+    "song": "Belle",
+    "display_label": "Belle, Beauty and the Beast",
+    "date": "2025-05-10",
+    "timestamp": "00:08:55",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=535s"
+  },
+  {
+    "song": "When Will My Life Begin",
+    "display_label": "When Will My Life Begin",
+    "date": "2025-05-10",
+    "timestamp": "00:15:42",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=942s"
+  },
+  {
+    "song": "This Wish",
+    "display_label": "This Wish, Wish",
+    "date": "2025-05-10",
+    "timestamp": "00:19:00",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=1140s"
+  },
+  {
+    "song": "Good Morning Baltimore",
+    "display_label": "Good Morning Baltimore, Hairspray",
+    "date": "2025-05-10",
+    "timestamp": "00:23:38",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=1418s"
+  },
+  {
+    "song": "Supercalifragilisticexpialidocious",
+    "display_label": "Supercalifragilisticexpialidocious, Mary Poppins",
+    "date": "2025-05-10",
+    "timestamp": "00:29:35",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=1775s"
+  },
+  {
+    "song": "The Wizard and I",
+    "display_label": "The Wizard and I, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "00:37:09",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=2229s"
+  },
+  {
+    "song": "What Is This Feeling?",
+    "display_label": "What Is This Feeling?, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "00:42:32",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=2552s"
+  },
+  {
+    "song": "Defying Gravity",
+    "display_label": "Defying Gravity, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "00:53:41",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=3221s"
+  },
+  {
+    "song": "Popular",
+    "display_label": "Popular, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "01:01:24",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=3684s"
+  },
+  {
+    "song": "One Short Day",
+    "display_label": "One Short Day, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "01:08:41",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=4121s"
+  },
+  {
+    "song": "No One Mourns the Wicked",
+    "display_label": "No One Mourns the Wicked, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "01:13:24",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=4404s"
+  },
+  {
+    "song": "Arabian Nights",
+    "display_label": "Arabian Nights, Aladdin",
+    "date": "2025-05-10",
+    "timestamp": "01:21:29",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=4889s"
+  },
+  {
+    "song": "Doctor Jones",
+    "display_label": "Doctor Jones, Aqua",
+    "date": "2025-05-10",
+    "timestamp": "01:26:45",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=5205s"
+  },
+  {
+    "song": "Life Is A Highway",
+    "display_label": "Life Is A Highway, Cars",
+    "date": "2025-05-10",
+    "timestamp": "01:33:02",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=5582s"
+  },
+  {
+    "song": "It's Lovely to Be Your Princess",
+    "display_label": "It's Lovely to Be Your Princess, Musical Chrissy",
+    "date": "2025-05-10",
+    "timestamp": "01:38:54",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=5934s"
+  },
+  {
+    "song": "Thumbelina",
+    "display_label": "Thumbelina, Thumbelina",
+    "date": "2025-05-10",
+    "timestamp": "01:43:05",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=6185s"
+  },
+  {
+    "song": "Hawaiian Roller Coaster Ride",
+    "display_label": "Hawaiian Roller Coaster Ride, Lilo & Stitch",
+    "date": "2025-05-10",
+    "timestamp": "01:47:29",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=6449s"
+  },
+  {
+    "song": "On the Road",
+    "display_label": "On the Road, Thumbelina",
+    "date": "2025-05-10",
+    "timestamp": "01:54:14",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=6854s"
+  },
+  {
+    "song": "I Just Can't Wait to Be King",
+    "display_label": "I Just Can't Wait to Be King, The Lion King",
+    "date": "2025-05-10",
+    "timestamp": "01:59:11",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=7151s"
+  },
+  {
+    "song": "Popular",
+    "display_label": "Popular, Wicked",
+    "date": "2025-05-10",
+    "timestamp": "02:05:15",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=7515s"
+  },
+  {
+    "song": "Once Upon a December",
+    "display_label": "Once Upon a December, Anastasia",
+    "date": "2025-05-10",
+    "timestamp": "02:24:20",
+    "final_hyperlink": "https://www.youtube.com/watch?v=MTZyNbAd8H0&t=8660s"
+  },
+  {
+    "song": "No One Mourns the Wicked",
+    "display_label": "No One Mourns the Wicked, Wicked",
+    "date": "2025-05-09",
+    "timestamp": "00:03:33",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=213s"
+  },
+  {
+    "song": "Hawaiian Roller Coaster Ride",
+    "display_label": "Hawaiian Roller Coaster Ride, Lilo & Stitch",
+    "date": "2025-05-09",
+    "timestamp": "00:09:34",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=574s"
+  },
+  {
+    "song": "Let It Go",
+    "display_label": "Let It Go, Frozen",
+    "date": "2025-05-09",
+    "timestamp": "00:15:25",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=925s"
+  },
+  {
+    "song": "Belle",
+    "display_label": "Belle, Beauty and the Beast",
+    "date": "2025-05-09",
+    "timestamp": "00:21:06",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=1266s"
+  },
+  {
+    "song": "I Just Can't Wait to Be King",
+    "display_label": "I Just Can't Wait to Be King, The Lion King",
+    "date": "2025-05-09",
+    "timestamp": "00:28:16",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=1696s"
+  },
+  {
+    "song": "The Next Right Thing",
+    "display_label": "The Next Right Thing, Frozen 2",
+    "date": "2025-05-09",
+    "timestamp": "00:32:57",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=1977s"
+  },
+  {
+    "song": "On the Road",
+    "display_label": "On the Road, Thumbelina",
+    "date": "2025-05-09",
+    "timestamp": "00:41:34",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=2494s"
+  },
+  {
+    "song": "The Scuttlebutt",
+    "display_label": "The Scuttlebutt, The Little Mermaid",
+    "date": "2025-05-09",
+    "timestamp": "00:46:21",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=2781s"
+  },
+  {
+    "song": "Doctor Jones",
+    "display_label": "Doctor Jones, Aqua",
+    "date": "2025-05-09",
+    "timestamp": "00:50:31",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=3031s"
+  },
+  {
+    "song": "Arabian Nights",
+    "display_label": "Arabian Nights, Aladdin",
+    "date": "2025-05-09",
+    "timestamp": "00:55:53",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=3353s"
+  },
+  {
+    "song": "Blue (Da Ba Dee)",
+    "display_label": "Blue (Da Ba Dee), Eiffel 65",
+    "date": "2025-05-09",
+    "timestamp": "01:01:46",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=3706s"
+  },
+  {
+    "song": "Be Our Guest",
+    "display_label": "Be Our Guest, Beauty and the Beast",
+    "date": "2025-05-09",
+    "timestamp": "01:05:40",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=3940s"
+  },
+  {
+    "song": "Pink Pony Club",
+    "display_label": "Pink Pony Club, Chappell Roan",
+    "date": "2025-05-09",
+    "timestamp": "01:15:19",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=4519s"
+  },
+  {
+    "song": "Barbie Girl",
+    "display_label": "Barbie Girl, Aqua",
+    "date": "2025-05-09",
+    "timestamp": "01:20:10",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=4810s"
+  },
+  {
+    "song": "Into the Unknown",
+    "display_label": "Into the Unknown, Frozen 2",
+    "date": "2025-05-09",
+    "timestamp": "01:25:20",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=5120s"
+  },
+  {
+    "song": "Popular",
+    "display_label": "Popular, Wicked",
+    "date": "2025-05-09",
+    "timestamp": "01:32:01",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=5521s"
+  },
+  {
+    "song": "Once Upon a December",
+    "display_label": "Once Upon a December, Anastasia",
+    "date": "2025-05-09",
+    "timestamp": "01:41:49",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=6109s"
+  },
+  {
+    "song": "Colors of the Wind",
+    "display_label": "Colors of the Wind, Pocahontas",
+    "date": "2025-05-09",
+    "timestamp": "01:47:35",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=6455s"
+  },
+  {
+    "song": "Monster",
+    "display_label": "Monster, Frozen: The Broadway Musical",
+    "date": "2025-05-09",
+    "timestamp": "01:53:01",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=6781s"
+  },
+  {
+    "song": "Time Warp",
+    "display_label": "Time Warp, The Rocky Horror Picture Show",
+    "date": "2025-05-09",
+    "timestamp": "01:58:00",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=7080s"
+  },
+  {
+    "song": "Defying Gravity",
+    "display_label": "Defying Gravity, Wicked",
+    "date": "2025-05-09",
+    "timestamp": "02:16:47",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=8207s"
+  },
+  {
+    "song": "Do You Want to Build a Snowman?",
+    "display_label": "Do You Want to Build a Snowman?, Frozen",
+    "date": "2025-05-09",
+    "timestamp": "02:24:58",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=8698s"
+  },
+  {
+    "song": "Prince Ali",
+    "display_label": "Prince Ali, Aladdin",
+    "date": "2025-05-09",
+    "timestamp": "02:28:55",
+    "final_hyperlink": "https://www.youtube.com/watch?v=ZBEBNzhAbjY&t=8935s"
   },
   {
     "song": "All by Myself",
@@ -420,8 +834,8 @@ const songData = [
     "final_hyperlink": "https://www.youtube.com/watch?v=l51VZWaCH9I&t=4675s"
   },
   {
-    "song": "On The Road",
-    "display_label": "On The Road, Thumbelina",
+    "song": "On the Road",
+    "display_label": "On the Road, Thumbelina",
     "date": "2025-05-06",
     "timestamp": "01:22:52",
     "final_hyperlink": "https://www.youtube.com/watch?v=l51VZWaCH9I&t=4972s"
@@ -89992,3 +90406,94 @@ const songData = [
     "final_hyperlink": "https://www.youtube.com/watch?v=57W6jNaXBZA&t=5814s"
   }
 ];
+
+// Now add the event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const songDropdown = document.getElementById('songDropdown');
+    const resultsDiv = document.getElementById('results');
+
+    // Check if songData is defined
+    if (typeof songData === 'undefined' || !Array.isArray(songData)) {
+        resultsDiv.innerHTML = '<p class="no-results" style="color: red;">Error: Song data array (songData) is missing or invalid in script.js.</p>';
+        console.error("songData is not defined or not an array.");
+        return;
+    }
+
+    // --- Populate Dropdown with Case-Insensitive Unique Songs ---
+    const uniqueSongOptions = new Map(); // Map<lowercaseSongTitle, { label: string, value: string }>
+
+    songData.forEach(entry => {
+        const label = entry.display_label || entry.song || "Unknown Song";
+        const value = entry.song || "Unknown Song";
+        const normalizedKey = value.toLowerCase(); // Normalize the 'song' value for keying
+
+        // Only add if this normalized song hasn't been added yet
+        if (!uniqueSongOptions.has(normalizedKey)) {
+            uniqueSongOptions.set(normalizedKey, { label: label, value: value }); // Store the original label and value
+        }
+    });
+
+    // Convert the map's *values* to an array for sorting
+    const sortedOptions = Array.from(uniqueSongOptions.values()); // Get the {label, value} objects
+
+    // Sort alphabetically by the display label
+    sortedOptions.sort((a, b) => a.label.localeCompare(b.label));
+
+    // Add sorted options to the dropdown
+    sortedOptions.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value; // Use original song title for filtering value
+        option.textContent = opt.label; // Use the stored label for display text
+        songDropdown.appendChild(option);
+    });
+
+    // --- Add Event Listener for Dropdown Changes ---
+    songDropdown.addEventListener('change', () => {
+        const selectedSongValue = songDropdown.value; // This is the original case value
+        resultsDiv.innerHTML = ''; // Clear previous results
+
+        if (!selectedSongValue) {
+             resultsDiv.innerHTML = '<p class="no-results">Please select a song from the dropdown above.</p>';
+            return;
+        }
+
+        // Filter data using a CASE-INSENSITIVE comparison
+        const matchingEntries = songData.filter(item => item.song.toLowerCase() === selectedSongValue.toLowerCase());
+
+        // Display results
+        if (matchingEntries.length > 0) {
+             const resultsTitle = document.createElement('h3');
+             resultsTitle.textContent = `Song History:`;
+             resultsDiv.appendChild(resultsTitle);
+
+            const resultsList = document.createElement('ul');
+            // Iterate through ALL matching entries found by the case-insensitive filter
+            matchingEntries.forEach(entry => {
+                const listItem = document.createElement('li');
+                const dateText = document.createTextNode(`${entry.date || 'N/A'} - `);
+                listItem.appendChild(dateText);
+
+                if (entry.final_hyperlink) {
+                    const link = document.createElement('a');
+                    link.href = entry.final_hyperlink;
+                    link.textContent = 'Link';
+                    link.target = "_blank";
+                    link.rel = "noopener noreferrer";
+                    listItem.appendChild(link);
+                } else {
+                    const noLinkText = document.createTextNode('(No valid link found)');
+                    const span = document.createElement('span');
+                    span.style.color = '#777';
+                    span.appendChild(noLinkText);
+                    listItem.appendChild(span);
+                }
+                resultsList.appendChild(listItem);
+            });
+            resultsDiv.appendChild(resultsList);
+        } else {
+            // This case should be less likely now with case-insensitive filtering
+            resultsDiv.innerHTML = `<p class="no-results">No records found for "${selectedSongValue}".</p>`;
+        }
+    });
+
+}); // End of DOMContentLoaded
